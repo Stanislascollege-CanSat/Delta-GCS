@@ -36,7 +36,7 @@ void setup(){
   // --------------- Starting serial @ 115200 -------------------- //
   Serial.begin(115200);
   while(!Serial);
-  Serial.print("{SGS:2;F:LOG,GCS Delta started on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
+  Serial.print("{SGS:2;F:LOG,[GCS] Delta started on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
 
   // --------------- Force RFM95W reset -------------------- //
   digitalWrite(PIN_RH_RST, LOW);
@@ -58,7 +58,7 @@ void setup(){
     Serial.print("{SGF:0;}");
     while(1);
   }
-  Serial.print("{SGF:2;F:LOG,Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
+  Serial.print("{SGF:2;F:LOG,[GCS] Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
 
   // --------------- Setting RH_Driver TxPower to 23 (maximum) -------------------- //
 
