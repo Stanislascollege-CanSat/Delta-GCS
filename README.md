@@ -1,6 +1,6 @@
 # Delta-MCU
 
-MCU software for Mother Can groundstation hardware.
+GCS software for MotherCan groundstation hardware.
 
 Build for the Dutch CanSat competition.
 
