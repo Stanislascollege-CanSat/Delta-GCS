@@ -108,38 +108,39 @@ void loop(){
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String s : commandList){
       if (s.equals("testcom")){
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
       } else if (s.equals("SAD")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("DEP")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("OPR")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("CLR")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("OPP")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("CLP")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("IDE")) {
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        //RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("RER")){
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+       // RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("MOF")){
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        Serial.print("{F:LOG,[GCS] SENDING...}");
+       // RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,[GCS] Placed MotherCan in Flight mode;}");
       } else if (s.equals("MOT")){
-        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+       // RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,[GCS] Placed MotherCan in Integration mode;}");
       } else {
         Serial.print("{F:ERR,Received invalid command: " + s + ";}");
