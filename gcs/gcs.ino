@@ -135,6 +135,12 @@ void loop(){
       } else if (s.equals("RER")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("MOF")){
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        Serial.print("{F:LOG,[GCS] Placed MotherCan in Flight mode;}");
+      } else if (s.equals("MOT")){
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        Serial.print("{F:LOG,[GCS] Placed MotherCan in Integration mode;}");
       } else {
         Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
