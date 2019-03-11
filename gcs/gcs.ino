@@ -1,3 +1,5 @@
+// ------- Delta GCS --------- //
+
 // INCLUDES
 #include <ArduinoSTL.h>
 #include <SPI.h>
@@ -54,11 +56,10 @@ void setup(){
   // --------------- Setting RH_Driver frequency -------------------- //
 
   if(!RHDriver.setFrequency(RHDriverFreq)){
-    //Serial.println("ERR: 12 -> RHDriver setFrequency failed. Check the connection with the radio chip.");
     Serial.print("{SGF:0;}");
     while(1);
   }
-  Serial.print("{SGF:2;F:LOG,[GCS] Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
+  Serial.print("{SGF:2;F:LOG,[GCS] Frequency set to: "); Serial.print(RHDriverFreq); Serial.print(" MHz;}");
 
   // --------------- Setting RH_Driver TxPower to 23 (maximum) -------------------- //
 
@@ -71,7 +72,7 @@ void setup(){
 
   // --------------- Setting duration timeout for RH_Datagram -------------------- //
 
-  RHNetwork.setTimeout(0);
+  RHNetwork.setTimeout(200);
 
 }
 
