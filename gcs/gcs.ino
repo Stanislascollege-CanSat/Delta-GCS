@@ -74,6 +74,9 @@ void setup(){
 
   RHNetwork.setTimeout(200);
 
+
+  // ---------------- Set T0 ------------- //
+  Serial.print("{F:ST0;}");
 }
 
 //
