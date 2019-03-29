@@ -24,6 +24,8 @@ const float RHDriverFreq = 868.0;   // RHDriver Frequency
 
 // VARIABLES
 String lastRSSI;
+bool reading;
+String readCommand;
 
 // RADIO DECLARATION
 RH_RF95 RHDriver(PIN_RH_CS, PIN_RH_INT);
@@ -77,6 +79,8 @@ void setup(){
 
   RHNetwork.setTimeout(0);
 
+  reading = false;
+  readCommand = "";
 }
 
 //
@@ -87,18 +91,16 @@ void loop(){
   // RECEIVE COMMAND FROM COMPUTER
   if(Serial.available()){
     String reader = Serial.readString();
-    bool reading = false;
-    String readCommand = "";
     std::vector<String> commandList;
     for(int i = 0; i < reader.length(); ++i){
       switch(reader.charAt(i)){
         case '[':
+          readCommand = "";
           reading = true;
           break;
         case ']':
           reading = false;
           commandList.push_back(readCommand);
-          readCommand = "";
           break;
         default:
           if(reading){
@@ -110,8 +112,10 @@ void loop(){
     // GATHERED COMMANDS FROM COMPUTER (format: [command_name]) in std::vector<String> commandList.
 
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
-    for(String s : commandList){
-      s = "[" + s + "]";
+    for(String a : commandList){
+      String s = "[";
+      s += a;
+      s += "]";
       Serial.print("{F:LOG,Received " + s + "}");
       if (s.equals("[testcom]")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
@@ -164,9 +168,9 @@ void loop(){
     Serial.println((char*) BUF);
   }
 
-  if(lastRSSI = String(RHDriver.lastRssi(), DEC)){
+  //if(lastRSSI = String(RHDriver.lastRssi(), DEC)){
 
-  } else {
-    Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
-  }
+  //} else {
+  //  Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
+  //}
 }
