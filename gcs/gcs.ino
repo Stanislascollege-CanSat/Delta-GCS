@@ -22,6 +22,9 @@ const unsigned short int PIN_RH_INT = 3;    //
 
 const float RHDriverFreq = 868.0;   // RHDriver Frequency
 
+// VARIABLES
+String lastRSSI;
+
 // RADIO DECLARATION
 RH_RF95 RHDriver(PIN_RH_CS, PIN_RH_INT);
 RHReliableDatagram RHNetwork(RHDriver, RH_CHANNEL_LOCAL);
@@ -108,37 +111,38 @@ void loop(){
 
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String s : commandList){
+      s = "[" + s + "]";
       Serial.print("{F:LOG,Received " + s + "}");
-      if (s.equals("testcom")){
+      if (s.equals("[testcom]")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("SAD")) {
+      } else if (s.equals("[SAD]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("DEP")) {
+      } else if (s.equals("[DEP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("OPR")) {
+      } else if (s.equals("[OPR]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("CLR")) {
+      } else if (s.equals("[CLR]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("OPP")) {
+      } else if (s.equals("[OPP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("CLP")) {
+      } else if (s.equals("[CLP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("FLIGHT_MODE")) {
+      } else if (s.equals("[FLIGHT_MODE]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
@@ -160,5 +164,9 @@ void loop(){
     Serial.println((char*) BUF);
   }
 
-  Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
+  if(lastRSSI = String(RHDriver.lastRssi(), DEC)){
+
+  } else {
+    Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
+  }
 }
