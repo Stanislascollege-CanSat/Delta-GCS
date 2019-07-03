@@ -1,5 +1,3 @@
-// ------- Delta GCS --------- //
-
 // INCLUDES
 #include <ArduinoSTL.h>
 #include <SPI.h>
@@ -22,14 +20,12 @@ const unsigned short int PIN_RH_INT = 9;    //
 
 const float RHDriverFreq = 868.0;   // RHDriver Frequency
 
-// VARIABLES
-String lastRSSI;
-bool reading;
-String readCommand;
-
 // RADIO DECLARATION
 RH_RF95 RHDriver(PIN_RH_CS, PIN_RH_INT);
 RHReliableDatagram RHNetwork(RHDriver, RH_CHANNEL_LOCAL);
+
+bool reading;
+String readCommand;
 
 //
 // SETUP FUNCTION
@@ -43,7 +39,7 @@ void setup(){
   // --------------- Starting serial @ 115200 -------------------- //
   Serial.begin(115200);
   while(!Serial);
-  Serial.print("{SGS:2;F:LOG,[GCS] Delta started on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
+  Serial.print("{SGS:2;F:LOG,[GCS] Delta started on @RHchannel " + String(RH_CHANNEL_LOCAL)+";}");
 
   // --------------- Force RFM95W reset -------------------- //
   digitalWrite(PIN_RH_RST, LOW);
@@ -61,10 +57,11 @@ void setup(){
   // --------------- Setting RH_Driver frequency -------------------- //
 
   if(!RHDriver.setFrequency(RHDriverFreq)){
+    //Serial.println("ERR: 12 -> RHDriver setFrequency failed. Check the connection with the radio chip.");
     Serial.print("{SGF:0;}");
     while(1);
   }
-  Serial.print("{SGF:2;F:LOG,[GCS] Frequency set to: "); Serial.print(RHDriverFreq); Serial.print(" MHz;}");
+  Serial.print("{SGF:2;F:LOG,[GCS] Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
 
   // --------------- Setting RH_Driver TxPower to 23 (maximum) -------------------- //
 
@@ -79,8 +76,10 @@ void setup(){
 
   RHNetwork.setTimeout(0);
 
+
   reading = false;
   readCommand = "";
+
 }
 
 //
@@ -114,23 +113,19 @@ void loop(){
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String a : commandList){
       String s = "[";
-      S += a;
+      s += a;
       s += "]";
-      Serial.print(s);
-      Serial.print(a);
-      //Serial.print("{F:LOG,Received " + s + ";}");
+      //Serial.print("{F:LOG,Received... " + s + ";}");
       if (s.equals("[testcom]")){
+        //Serial.println("testcom");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
-        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
-        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
       } else if (s.equals("[SAD]")) {
+        //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
-        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
-        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
       } else if (s.equals("[DEP]")) {
@@ -148,19 +143,18 @@ void loop(){
       } else if (s.equals("[CLP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("[FLIGHT_MODE]")) {
+      } else if (s.equals("[FLIGHT_MODE]")){
+        //Serial.print("{F:LOG,YES;}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
-        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
-        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
       }else if(s.substr(0, 8).equals("[AIM_LAT")){
-        
+
       }else if(s.substr(0, 8).equals("[AIM_LON")){
-        
+
       }else if(s.substr(0, 8).equals("[AIM_ALT")){
-        
+
       }else {
         Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
@@ -173,12 +167,8 @@ void loop(){
   uint8_t TO_ADDRESS;
 
   if(RHNetwork.recvfromAck(BUF, &LEN, &FROM_ADDRESS, &TO_ADDRESS)){
-    Serial.println((char*) BUF);
+    Serial.print((char*) BUF);
   }
 
-  //if(lastRSSI = String(RHDriver.lastRssi(), DEC)){
-
-  //} else {
-  //  Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
-  //}
+  //Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
 }
