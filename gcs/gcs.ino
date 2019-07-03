@@ -16,9 +16,9 @@ const unsigned short int RH_CHANNEL_RHO = 5;        //
 const unsigned short int RH_CHANNEL_LOCAL = RH_CHANNEL_GS_DELTA; // Set local channel, used by the programme
 
 // PIN DEFINITIONS
-const unsigned short int PIN_RH_RST = 2;    //
-const unsigned short int PIN_RH_CS = 4;     // Setting: RHDriver pins
-const unsigned short int PIN_RH_INT = 3;    //
+const unsigned short int PIN_RH_RST = 17;    //
+const unsigned short int PIN_RH_CS = 18;     // Setting: RHDriver pins
+const unsigned short int PIN_RH_INT = 9;    //
 
 const float RHDriverFreq = 868.0;   // RHDriver Frequency
 
@@ -114,9 +114,11 @@ void loop(){
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String a : commandList){
       String s = "[";
-      s += a;
+      S += a;
       s += "]";
-      Serial.print("{F:LOG,Received " + s + "}");
+      Serial.print(s);
+      Serial.print(a);
+      //Serial.print("{F:LOG,Received " + s + ";}");
       if (s.equals("[testcom]")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
@@ -153,7 +155,13 @@ void loop(){
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
-      } else {
+      }else if(s.substr(0, 8).equals("[AIM_LAT")){
+        
+      }else if(s.substr(0, 8).equals("[AIM_LON")){
+        
+      }else if(s.substr(0, 8).equals("[AIM_ALT")){
+        
+      }else {
         Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
     }
